@@ -5,14 +5,75 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  run-tests:
+  test-unit:
     runs-on: ubuntu-latest
+    name: Unit Tests (testing-with-doubles)
     steps:
-      - name: Checkout repository
+      - name: Checkout Unit Testing Repository
         uses: actions/checkout@v4
+        with:
+          repository: JeffCompasClassrooms/testing-with-doubles-gabrielpuente58
 
-      # ---- your tests go here ----
-      - name: Run test for repo 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
         run: |
-          echo "Running tests..."
-          # replace this line with your actual test command(s)
+          python -m pip install --upgrade pip
+          pip install pytest pytest-mock
+
+      - name: Run unit tests
+        run: |
+          pytest tests/ -v
+
+  test-system:
+    runs-on: ubuntu-latest
+    name: System Tests (testing-systems)
+    steps:
+      - name: Checkout System Testing Repository
+        uses: actions/checkout@v4
+        with:
+          repository: JeffCompasClassrooms/testing-systems-gabrielpuente58
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run system tests
+        run: |
+          pytest test_*.py -v
+
+  test-behave:
+    runs-on: ubuntu-latest
+    name: Behave Tests (testing-with-behave)
+    steps:
+      - name: Checkout Behave Testing Repository
+        uses: actions/checkout@v4
+        with:
+          repository: JeffCompasClassrooms/testing-with-behave-gabrielpuente58
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run behave tests for isitchristmas
+        run: |
+          cd isitchristmas && behave --no-capture
+
+      - name: Run behave tests for peppers-ghost
+        run: |
+          cd peppers-ghost && behave --no-capture
